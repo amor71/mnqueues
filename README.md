@@ -1,5 +1,6 @@
 [![Updates](https://pyup.io/repos/github/amor71/mnqueues/shield.svg)](https://pyup.io/repos/github/amor71/mnqueues/)
 [![Python 3](https://pyup.io/repos/github/amor71/mnqueues/python-3-shield.svg)](https://pyup.io/repos/github/amor71/mnqueues/)
+[![Sourcery](https://img.shields.io/badge/Sourcery-enabled-brightgreen)](https://sourcery.ai)
 
 # What are mnqueues?
 

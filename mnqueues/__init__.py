@@ -1,3 +1,5 @@
+from multiprocessing.queues import Queue
+
 __version__ = "0.0.1"
 
 
@@ -6,6 +8,7 @@ class Monitor:
         pass
 
 
-class Queue:
-    def __init__(self, monitor: Monitor):
+class MNQueue(Queue):
+    def __init__(self, monitor: Monitor, **kwargs):
         self.monitor = monitor
+        super().__init__(kwargs)

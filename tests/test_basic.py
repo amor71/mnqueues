@@ -2,6 +2,9 @@ import pytest
 import mnqueues as mnq
 
 
-def test_setup():
-    monitor = mnq.Monitor()
-    queue = mnq.MNQueue(monitor)
+def test_mqt_instantiate():
+    queue = mnq.MNQueue()
+
+
+def test_create_monitor():
+    monitor = mnq.Monitor("name")

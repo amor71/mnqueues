@@ -1,4 +1,4 @@
-# What is mnqueues?
+# What are mnqueues?
 
 `mnqueues` stands for Monitored Queues - a coupling between a Queue and a Monitor entity. An abstract Queue is a means for two, or more end points to exchange data. A Monitor collect and alerts on Queue usage statistics. 
 

@@ -54,6 +54,8 @@ workflows:
       - build_and_pypi_publish:
           requires:
             - test
+          context:
+            - pypi
           filters:
             branches:
               only:

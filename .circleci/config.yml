@@ -53,7 +53,7 @@ workflows:
       - test:
           filters:
             tags:
-              only: /.*/
+              only: /^v.*/
       - build_and_pypi_publish:
           requires:
             - test

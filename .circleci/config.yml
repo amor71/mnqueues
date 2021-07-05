@@ -47,6 +47,7 @@ jobs:
             twine upload dist/*
 
 workflows:
+  version: 2
   test_build_and_publish:  
     jobs:
       - test:

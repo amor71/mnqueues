@@ -11,12 +11,12 @@ workflows:
   build_test_and_deploy:  
     jobs:
       - build-and-test:
-        filters:
-          tags:
-            only: /.*/
-      - deploy:
-        requires:
-          - build-and-test
+          filters:
+            tags:
+              only: /.*/
+      #- deploy:
+      #  requires:
+      #    - build-and-test
 
 jobs:
   build-and-test:  

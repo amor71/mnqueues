@@ -51,11 +51,11 @@ workflows:
     jobs:
         - build-and-test
 
-      - pypi_deploy:
-        requires:
-          - build-and-test
-        filters:
-          branches:
-            only:
-               - main
+        - pypi_deploy:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only:
+                - main
 

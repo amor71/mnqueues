@@ -10,10 +10,7 @@ orbs:
 workflows:
   build_test_and_deploy:  
     jobs:
-      - build-and-test:
-        filters:
-          tags:
-            only: /.*/
+      - build-and-test
       - deploy:
         requires:
           - build-and-test
@@ -21,7 +18,9 @@ workflows:
             tags:
               only: /[0-9]+(\.[0-9]+)*/
             branches:
-              ignore: /.*/
+              only:
+                - main
+
 
 jobs:
   build-and-test:  

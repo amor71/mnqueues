@@ -50,6 +50,7 @@ workflows:
   build_test_and_deploy:  
     jobs:
       - build-and-test
+      
       - pypi_deploy:
         requires:
           - build-and-test

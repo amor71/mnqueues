@@ -8,7 +8,7 @@ orbs:
   python: circleci/python@1.4.0
 
 jobs:
-  build-and-test:  
+  test:  
     docker:
       - image: cimg/python:3.9
     steps:
@@ -21,7 +21,7 @@ jobs:
           name: Run tests
           command: export PYTHONPATH=$PWD; pytest
 
-  pypi_deploy:
+  build_and_pypi_publish:
     docker:
       - image: cimg/python:3.9
     steps:
@@ -49,10 +49,10 @@ jobs:
 workflows:
   build_test_and_deploy:  
     jobs:
-      - build-and-test
-      - pypi_deploy:
+      - test
+      - build_and_pypi_publish:
           requires:
-            - build-and-test
+            - test
           filters:
             branches:
               only:

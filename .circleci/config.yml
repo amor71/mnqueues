@@ -10,11 +10,11 @@ orbs:
 workflows:
   build_test_and_deploy:  
     jobs:
-      - build-and-test
+      - build-and-test:
         filters:
           tags:
             only: /.*/
-      - deploy
+      - deploy:
         requires:
           - build-and-test
 

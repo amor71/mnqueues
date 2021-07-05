@@ -50,6 +50,9 @@ workflows:
   test_build_and_publish:  
     jobs:
       - test
+          filters:
+            tags:
+              only: /.*/
       - build_and_pypi_publish:
           requires:
             - test

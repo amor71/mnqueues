@@ -25,9 +25,8 @@ jobs:
     docker:
       - image: cimg/python:3.9
     steps:
-      - tags:
-        only: /.*/
       - checkout
+      - tags: /.*/
       - python/install-packages:
           pkg-manager: pip
           app-dir: requirements  # If you're requirements.txt isn't in the root directory.

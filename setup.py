@@ -6,7 +6,7 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-with open("liualgotrader/requirements/release.txt") as f:
+with open("requirements/release.txt") as f:
     requirements = f.read().splitlines()
 
 
@@ -26,17 +26,17 @@ def get_version(rel_path):
 
 
 setuptools.setup(
-    name="liualgotrader",
-    version=get_version("liualgotrader/__init__.py"),
+    name="mnqeues",
+    version=get_version("mnqueues/__init__.py"),
     author="amor71",
-    author_email="amichay@sgeltd.com",
-    description="a Pythonic all-batteries-included framework for effective algorithmic trading. The framework is intended to simplify development, testing, deployment and evaluating algo trading strategies.",
+    author_email="amor71@sgeltd.com",
+    description="Monitored Multiprocessing Queues in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/amor71/LiuAlgoTrader",
+    url="https://github.com/amor71/mnqueues",
     license="MIT",
     install_requires=requirements,
-    data_files=[("liualgotrader", ["liualgotrader/requirements/release.txt"])],
+    data_files=[("mnqueues", ["requirements/release.txt"])],
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3.9",
@@ -44,10 +44,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.9",
-    scripts=[
-        "liualgotrader/trader",
-        "liualgotrader/market_miner",
-        "liualgotrader/backtester",
-        "liualgotrader/liu",
-    ],
+    scripts=[],
 )

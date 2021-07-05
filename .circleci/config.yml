@@ -58,5 +58,8 @@ workflows:
             - test
           context:
             - pypi
+          filters:
+            tags:
+              only: /^v.*/
           
 

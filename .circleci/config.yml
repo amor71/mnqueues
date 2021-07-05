@@ -59,6 +59,8 @@ workflows:
           context:
             - pypi
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: /^v.*/
           

@@ -39,7 +39,7 @@ jobs:
           command: |
             echo -e "[pypi]" >> ~/.pypirc
             echo -e "username = __token__" >> ~/.pypirc
-            echo -e "password = $PYPI" >> ~/.pypirc
+            echo -e "password = $PYPI_MNQUEUES" >> ~/.pypirc
             cat ~/.pypirc
       - run:
           name: deploy to pypi

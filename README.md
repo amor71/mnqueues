@@ -8,3 +8,9 @@
 
 For example, a Queue may be a multiprocessing.Queue, used for asynchronous exchange of data between two processes, and Monitor alerts when the rate of production is higher than rate of consumption, indicating performance issues on the consumer side.
 
+## Which measures are tracked?
+
+`mnqueues` tracks several measures per queue:
+
+1. Average number of writes to queue per minute,
+2. Average number of reads to queue per minute,

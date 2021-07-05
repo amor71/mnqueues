@@ -1,6 +1,6 @@
 import pytest
 import mnqueues as mnq
-import multiprocessing
+from multiprocessing import Queue, Process
 
 
 def test_mqt_instantiate():
@@ -9,10 +9,6 @@ def test_mqt_instantiate():
 
 def test_create_monitor():
     monitor = mnq.Monitor("name")
-
-
-import pytest
-from multiprocessing import Queue, Process
 
 
 def producer(q: mnq.MNQueue):

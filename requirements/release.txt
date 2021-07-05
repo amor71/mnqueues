@@ -1,3 +1,5 @@
 pytest
 opencensus
 black
+opencensus-ext-stackdriver
+grpcio

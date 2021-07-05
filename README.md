@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/amor71/mnqueues.svg?style=shield)](https://circleci.com/gh/amor71/mnqueues-docs)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mnqueues)
 [![Updates](https://pyup.io/repos/github/amor71/mnqueues/shield.svg)](https://pyup.io/repos/github/amor71/mnqueues/)
 [![Python 3](https://pyup.io/repos/github/amor71/mnqueues/python-3-shield.svg)](https://pyup.io/repos/github/amor71/mnqueues/)

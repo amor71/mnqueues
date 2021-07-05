@@ -7,21 +7,6 @@ orbs:
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
   python: circleci/python@1.4.0
 
-workflows:
-  build_test_and_deploy:  
-    jobs:
-      - build-and-test
-      - deploy:
-        requires:
-          - build-and-test
-        filters:
-            tags:
-              only: /[0-9]+(\.[0-9]+)*/
-            branches:
-              only:
-                - main
-
-
 jobs:
   build-and-test:  
     docker:
@@ -60,4 +45,12 @@ jobs:
           command: |
             pip install twine
             twine upload dist/*
+
+workflows:
+  build_test_and_deploy:  
+    jobs:
+      - build-and-test
+      - deploy:
+        requires:
+          - build-and-test
 

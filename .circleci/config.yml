@@ -10,10 +10,7 @@ orbs:
 workflows:
   build_test_and_deploy:  
     jobs:
-      - build-and-test:
-          filters:
-            tags:
-              only: /.*/
+      - build-and-test
       #- deploy:
       #  requires:
       #    - build-and-test
@@ -36,6 +33,7 @@ jobs:
     docker:
       - image: cimg/python:3.9
     steps:
+      - checkout
       - python/install-packages:
           pkg-manager: pip
           app-dir: requirements  # If you're requirements.txt isn't in the root directory.

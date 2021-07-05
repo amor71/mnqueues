@@ -8,27 +8,18 @@ orbs:
   python: circleci/python@1.4.0
 
 workflows:
-  sample:  # This is the name of the workflow, feel free to change it to better match your workflow.
+  build_and_deploy:  # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run. 
     # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows 
     jobs:
       - build-and-test
+      - deploy
 
 
 jobs:
-  build-and-test:  # This is the name of the job, feel free to change it to better match what you're trying to do!
-    # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
-    # You can specify an image from Dockerhub or use one of the convenience images from CircleCI's Developer Hub
-    # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
-    # The executor is the environment in which the steps below will be executed - below will use a python 3.9 container
-    # Change the version below to your required version of python
+  build-and-test:  
     docker:
-      - image: cimg/python:3.8
-    # Checkout the code as the first step. This is a dedicated CircleCI step.
-    # The python orb's install-packages step will install the dependencies from a Pipfile via Pipenv by default.
-    # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
-    # Then run your tests!
-    # CircleCI will report the results back to your VCS provider.
+      - image: cimg/python:3.9
     steps:
       - checkout
       - python/install-packages:
@@ -39,3 +30,27 @@ jobs:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
           command: export PYTHONPATH=$PWD; pytest
+
+  deploy:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - python/install-packages:
+          pkg-manager: pip
+          app-dir: requirements  # If you're requirements.txt isn't in the root directory.
+          pip-dependency-file: release.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
+      - run:
+          name: build package
+          command: |
+            python setup.py sdist
+      - run:
+          name: init .pypirc
+          command: |
+            echo -e "[pypi]" >> ~/.pypirc
+            echo -e "username = __token__" >> ~/.pypirc
+            echo -e "password = $PYPI" >> ~/.pypirc
+      - run:
+          name: deploy to pypi
+            pip install twine
+            twine upload dist/*
+

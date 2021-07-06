@@ -2,6 +2,7 @@ import pytest
 from multiprocessing import Queue, Process
 import mnqueues as mnq
 from mnqueues.gcp_monitor import GCPMonitor
+from queue import Empty
 from time import sleep
 import random
 
@@ -12,12 +13,13 @@ def test_gcp_monitor():
 
 
 def consumer(q: mnq.MNQueue):
-    try:
-        for _ in range(10000):
-            print(q.get())
+    for _ in range(10000):
+        try:
+            print(q.get(block=True, timeout=1))
             sleep(0.01)
-    except Exception as e:
-        print(f"[EXCEPTION] {e}")
+        except Empty:
+            print("Empty queue, quiting")
+            break
 
     print("consumer: get done, giving grace")
     sleep(65)
@@ -43,3 +45,18 @@ def test_mp_basic():
 
     p.join()
     c.join()
+
+
+def test_mp_2():
+    q = mnq.MNQueue(monitor=GCPMonitor("name"))
+    p = Process(target=producer, args=(q,))
+    c1 = Process(target=consumer, args=(q,))
+    c2 = Process(target=consumer, args=(q,))
+
+    p.start()
+    c1.start()
+    c2.start()
+
+    p.join()
+    c1.join()
+    c2.join()

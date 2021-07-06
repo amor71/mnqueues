@@ -40,10 +40,10 @@ class MNQueue:
         return self.queue.full()
 
     def get_nowait(self):
-        return self.queue.get(False)
+        return self.get(False)
 
     def put_nowait(self, obj):
-        return self.queue.put(obj, False)
+        return self.put(obj, False)
 
     def close(self):
         self.queue.close()

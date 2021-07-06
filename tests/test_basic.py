@@ -11,11 +11,11 @@ def test_create_monitor():
     monitor = mnq.Monitor("name")
 
 
-def producer(q: mnq.MNQueue):
+def consumer(q: mnq.MNQueue):
     print(q.get())
 
 
-def consumer(q: mnq.MNQueue):
+def producer(q: mnq.MNQueue):
     q.put("testing 123")
 
 

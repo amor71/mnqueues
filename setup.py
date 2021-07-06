@@ -26,7 +26,7 @@ def get_version(rel_path):
 
 
 setuptools.setup(
-    name="mnqeues",
+    name="mnqueues",
     version=get_version("mnqueues/__init__.py"),
     author="amor71",
     author_email="amor71@sgeltd.com",

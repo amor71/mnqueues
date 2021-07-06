@@ -1,7 +1,7 @@
 from multiprocessing import Queue
 from typing import Optional
 
-__version__ = "0.0.10"
+__version__ = "0.0.11"
 
 
 class Monitor:
@@ -22,12 +22,20 @@ class MNQueue:
 
     def put(self, *args, **kwargs):
         if self.monitor:
-            self.monitor.track_put()
+            try:
+                self.monitor.track_put()
+            except Exception as e:
+                print(f"failed to track put() with {e}")
+
         return self.queue.put(*args, **kwargs)
 
     def get(self, *args, **kwargs):
         if self.monitor:
-            self.monitor.track_get()
+            try:
+                self.monitor.track_get()
+            except Exception as e:
+                print(f"failed to track get() with {e}")
+
         return self.queue.get(*args, **kwargs)
 
     def qsize(self):

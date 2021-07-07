@@ -14,8 +14,6 @@ class GCPMonitor(Monitor):
     created = False
 
     def __init__(self, name: str):
-        self.put_counter: int
-        self.get_counter: int
         super().__init__(name)
 
     def create(self):
@@ -41,9 +39,6 @@ class GCPMonitor(Monitor):
         stats.stats.view_manager.register_view(self.v_get)
         exporter = stats_exporter.new_stats_exporter()
         stats.stats.view_manager.register_exporter(exporter)
-
-        self.put_counter = 0
-        self.get_counter = 0
 
     def track_put(self):
         if not self.created:

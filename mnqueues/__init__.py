@@ -1,12 +1,14 @@
 from multiprocessing import Queue
 from typing import Optional
 
-__version__ = "0.0.12"
+__version__ = "0.0.13"
 
 
 class Monitor:
     def __init__(self, name: str):
         self.name = name
+        self.put_counter: int = 0
+        self.get_counter: int = 0
 
     def track_put(self):
         pass

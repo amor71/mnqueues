@@ -12,6 +12,7 @@
 
 1. Average number of writes to queue per minute,
 2. Average number of reads to queue per minute,
+3. Time spend in queue (latency) in milliseconds. 
 ## Installation
 
 To install `mnqueues` type: 
@@ -49,7 +50,12 @@ Log all `put()` and `get()` calls to a log file with the the name `log-file-name
 
     monitor = LOGMonitor("unique-name")
 
-All calls to `put()` and `get()` are sent to Google Cloud Monitor. The Monitor class sends data to two custom measures: `OpenCensus/mnqueues.number_queue_get` and `OpenCensus/mnqueues.number_queue_put`. [See](https://amor71.github.io/mnqueues/gcp-metric-explorer.png) for details.
+All calls to `put()` and `get()` are sent to Google Cloud Monitor. The Monitor class sends data to two custom measures:
+1. `OpenCensus/mnqueues.number_queue_get` (line, no aggregation on GCP required)
+2. `OpenCensus/mnqueues.number_queue_put` (line, no aggregation on GCP required)
+3. `OpenCensus/mnqueues.time_in_queue_distribution` (heat-map with sum, shows latency distribution)
+
+[See](https://amor71.github.io/mnqueues/gcp-metric-explorer.png) for details.
 
 ## Examples
 

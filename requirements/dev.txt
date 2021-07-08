@@ -3,3 +3,8 @@ opencensus
 black
 opencensus-ext-stackdriver
 grpcio
+black
+mypy
+pylint
+therapist
+bandit

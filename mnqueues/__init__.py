@@ -1,12 +1,18 @@
 from multiprocessing import Queue
 from typing import Optional
 
-__version__ = "0.0.11"
+__version__ = "0.0.13"
+
+import copy
+import time
+from random import randint
 
 
 class Monitor:
     def __init__(self, name: str):
         self.name = name
+        self.put_counter: int = 0
+        self.get_counter: int = 0
 
     def track_put(self):
         pass
@@ -14,29 +20,61 @@ class Monitor:
     def track_get(self):
         pass
 
+    # tnq is measured in nano-seconds
+    def time_in_queue(self, tnq: int):
+        pass
+
 
 class MNQueue:
     def __init__(self, monitor: Optional[Monitor] = None, maxsize=0):
         self.monitor = monitor
-        self.queue = Queue(maxsize)
+        self.queue: Queue = Queue(maxsize)
 
-    def put(self, *args, **kwargs):
-        if self.monitor:
-            try:
-                self.monitor.track_put()
-            except Exception as e:
-                print(f"failed to track put() with {e}")
+    def put_w_tnq(self, *args, **kwargs):
+        payload = {
+            "_signature": "mnqueue_tnq",
+            "tnq": time.time_ns(),
+        }
+        if "obj" in kwargs:
+            payload["obj"] = kwargs["obj"]
+            kwargs["obj"] = payload
+        else:
+            payload["obj"] = args[0]
+            args = list(args)
+            args[0] = payload
+            args = tuple(args)
 
         return self.queue.put(*args, **kwargs)
 
-    def get(self, *args, **kwargs):
-        if self.monitor:
-            try:
-                self.monitor.track_get()
-            except Exception as e:
-                print(f"failed to track get() with {e}")
+    def should_send_tnq(self) -> bool:
+        return randint(1, 20) == 1  # nosec
 
-        return self.queue.get(*args, **kwargs)
+    def put(self, *args, **kwargs):
+        if self.monitor:
+            self.monitor.track_put()
+            if self.should_send_tnq():
+                return self.put_w_tnq(*args, **kwargs)
+
+        return self.queue.put(*args, **kwargs)
+
+    def extract_tnq(self, queue_content):
+        if (
+            isinstance(queue_content, dict)
+            and queue_content.get("_signature", "") == "mnqueue_tnq"
+        ):
+            self.monitor.time_in_queue(
+                time.time_ns() - int(queue_content["tnq"])
+            )
+            return queue_content["obj"]
+        return queue_content
+
+    def get(self, *args, **kwargs):
+        rc = self.queue.get(*args, **kwargs)
+        if self.monitor:
+            self.monitor.track_get()
+            rc = self.extract_tnq(rc)
+
+        return rc
 
     def qsize(self):
         return self.queue.qsize()

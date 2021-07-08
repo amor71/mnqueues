@@ -30,26 +30,29 @@ class MNQueue:
         self.monitor = monitor
         self.queue = Queue(maxsize)
 
+    def put_w_tnq(self, *args, **kwargs):
+        payload = {
+            "_signature": "mnqueue_tnq",
+            "tnq": time.time_ns(),
+        }
+        if "obj" in kwargs:
+            payload["obj"] = kwargs["obj"]
+            kwargs_copy = copy.deepcopy(kwargs)
+            kwargs_copy["obj"] = payload
+            return self.queue.put(**args, **kwargs_copy)
+
+        payload["obj"] = args[0]
+        args_copy = list(args)
+        args_copy[0] = payload
+        args_copy = tuple(args_copy)
+        return self.queue.put(*args_copy, **kwargs)
+
     def put(self, *args, **kwargs):
         if self.monitor:
             try:
                 self.monitor.track_put()
                 if randint(1, 20) == 1:
-                    payload = {
-                        "_signature": "mnqueue_tnq",
-                        "tnq": time.time_ns(),
-                    }
-                    if "obj" in kwargs:
-                        payload["obj"] = kwargs["obj"]
-                        kwargs_copy = copy.deepcopy(kwargs)
-                        kwargs_copy["obj"] = payload
-                        return self.queue.put(**args, **kwargs_copy)
-                    else:
-                        payload["obj"] = args[0]
-                        args_copy = list(args)
-                        args_copy[0] = payload
-                        args_copy = tuple(args_copy)
-                        return self.queue.put(*args_copy, **kwargs)
+                    return self.put_w_tnq(self, *args, **kwargs)
             except Exception as e:
                 print(f"failed to track put() with {e}")
 

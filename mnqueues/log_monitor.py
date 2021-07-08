@@ -34,3 +34,8 @@ class LOGMonitor(Monitor):
             self.create()
         self.get_counter += 1
         logging.info(f"get counter: {self.get_counter}")
+
+    def time_in_queue(self, tnq: int):
+        if not self.created:
+            self.create()
+        logging.info(f"time-in-queue {tnq/1000000} millisecond")

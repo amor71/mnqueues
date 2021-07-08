@@ -39,7 +39,7 @@ class MNQueue:
             payload["obj"] = kwargs["obj"]
             kwargs_copy = copy.deepcopy(kwargs)
             kwargs_copy["obj"] = payload
-            return self.queue.put(**args, **kwargs_copy)
+            return self.queue.put(*args, **kwargs_copy)
 
         payload["obj"] = args[0]
         args_copy = list(args)
@@ -52,7 +52,7 @@ class MNQueue:
             try:
                 self.monitor.track_put()
                 if randint(1, 20) == 1:
-                    return self.put_w_tnq(self, *args, **kwargs)
+                    return self.put_w_tnq(*args, **kwargs)
             except Exception as e:
                 print(f"failed to track put() with {e}")
 
@@ -63,11 +63,7 @@ class MNQueue:
         if self.monitor:
             try:
                 self.monitor.track_get()
-                if (
-                    isinstance(rc, dict)
-                    and "_signature" in rc
-                    and rc["_signature"] == "mnqueue_tnq"
-                ):
+                if isinstance(rc, dict) and rc.get("_signature", "") == "mnqueue_tnq":
                     self.monitor.time_in_queue(time.time_ns() - int(rc["tnq"]))
                     rc = rc["obj"]
             except Exception as e:

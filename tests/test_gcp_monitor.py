@@ -67,7 +67,6 @@ def consumer_no_delay(q: mnq.MNQueue):
     for _ in range(10000):
         try:
             print(q.get(block=True, timeout=1))
-            sleep(0.01)
         except Empty:
             print("Empty queue, quiting")
             break

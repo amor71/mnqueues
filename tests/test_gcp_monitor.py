@@ -1,11 +1,13 @@
-import pytest
 import multiprocessing as mp
-from multiprocessing import Queue, Process
-import mnqueues as mnq
-from mnqueues.gcp_monitor import GCPMonitor
+import random
+from multiprocessing import Process, Queue
 from queue import Empty
 from time import sleep
-import random
+
+import pytest
+
+import mnqueues as mnq
+from mnqueues.gcp_monitor import GCPMonitor
 
 
 def test_gcp_monitor():
@@ -36,6 +38,7 @@ def producer(q: mnq.MNQueue):
     print("producer completed")
 
 
+@pytest.mark.devtest
 def test_mp_basic():
     q = mnq.MNQueue(monitor=GCPMonitor("name"))
     p = Process(target=producer, args=(q,))
@@ -48,6 +51,7 @@ def test_mp_basic():
     c.join()
 
 
+@pytest.mark.devtest
 def test_mp_2():
     q = mnq.MNQueue(monitor=GCPMonitor("name"))
     p = Process(target=producer, args=(q,))
@@ -76,6 +80,7 @@ def consumer_no_delay(q: mnq.MNQueue):
     print("consumer_no_delay completed")
 
 
+@pytest.mark.devtest
 def test_mp_3():
     print("grace before starting test_mp_3")
     sleep(65)

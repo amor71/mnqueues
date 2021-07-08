@@ -19,7 +19,7 @@ jobs:
           pip-dependency-file: release.txt  
       - run:
           name: Run tests
-          command: export PYTHONPATH=$PWD; pytest
+          command: export PYTHONPATH=$PWD; pytest -m "not devtest"
 
   build_and_pypi_publish:
     docker:

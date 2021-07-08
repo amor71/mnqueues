@@ -1,14 +1,16 @@
-import pytest
-from multiprocessing import Queue, Process
-import mnqueues as mnq
-from mnqueues.gcp_monitor import GCPMonitor
+import random
+from multiprocessing import Process, Queue
 from queue import Empty, Full
 from time import sleep
-import random
+
+import pytest
+
+import mnqueues as mnq
+from mnqueues.log_monitor import LOGMonitor
 
 
 def test_empty():
-    q = mnq.MNQueue(monitor=GCPMonitor("name"))
+    q = mnq.MNQueue(monitor=LOGMonitor("name"))
     try:
         _ = q.get(block=False)
     except Empty:
@@ -18,7 +20,7 @@ def test_empty():
 
 
 def test_no_full():
-    q = mnq.MNQueue(maxsize=1, monitor=GCPMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
     try:
         _ = q.put(
             "aaa",
@@ -26,14 +28,16 @@ def test_no_full():
         )
     except Full:
         print("got full exception, bad!")
-        raise AssertionError("put on queue w/ short-size  got wrong Full exception")
+        raise AssertionError(
+            "put on queue w/ short-size  got wrong Full exception"
+        )
 
     q.get()
     return True
 
 
 def test_full():
-    q = mnq.MNQueue(maxsize=1, monitor=GCPMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
     try:
         _ = q.put(
             "aaa",
@@ -56,7 +60,7 @@ def test_full():
 
 
 def test_timeout():
-    q = mnq.MNQueue(maxsize=1, monitor=GCPMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
     try:
         _ = q.put("aaa")
         _ = q.put("aaa", block=True, timeout=5)
@@ -68,7 +72,7 @@ def test_timeout():
 
 
 def test_put_nowait():
-    q = mnq.MNQueue(maxsize=1, monitor=GCPMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
     try:
         _ = q.put_nowait("aaa")
         _ = q.put_nowait("aaa")
@@ -80,7 +84,7 @@ def test_put_nowait():
 
 
 def test_get_nowait():
-    q = mnq.MNQueue(maxsize=1, monitor=GCPMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
     try:
         _ = q.get_nowait()
     except Empty:
@@ -91,7 +95,7 @@ def test_get_nowait():
 
 
 def test_close():
-    q = mnq.MNQueue(maxsize=1, monitor=GCPMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
     q.close()
     try:
         _ = q.get()
@@ -102,8 +106,8 @@ def test_close():
     raise AssertionError("expected exception")
 
 
-def test_empty():
-    q = mnq.MNQueue(maxsize=1, monitor=GCPMonitor("name"))
+def test_empty_2():
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
     if q.empty():
         print("queue is empty, good!")
         return True
@@ -112,14 +116,14 @@ def test_empty():
 
 
 def test_join():
-    q = mnq.MNQueue(maxsize=1, monitor=GCPMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
     q.close()
     q.join_thread()
     return True
 
 
-def test_join():
-    q = mnq.MNQueue(maxsize=1, monitor=GCPMonitor("name"))
+def test_cancel_join_thread():
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
     q.close()
     q.cancel_join_thread()
     return True

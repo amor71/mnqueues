@@ -3,9 +3,9 @@ from typing import Optional
 
 __version__ = "0.0.13"
 
-from random import randint
-import time
 import copy
+import time
+from random import randint
 
 
 class Monitor:
@@ -28,7 +28,7 @@ class Monitor:
 class MNQueue:
     def __init__(self, monitor: Optional[Monitor] = None, maxsize=0):
         self.monitor = monitor
-        self.queue = Queue(maxsize)
+        self.queue: Queue = Queue(maxsize)
 
     def put_w_tnq(self, *args, **kwargs):
         payload = {
@@ -37,37 +37,42 @@ class MNQueue:
         }
         if "obj" in kwargs:
             payload["obj"] = kwargs["obj"]
-            kwargs_copy = copy.deepcopy(kwargs)
-            kwargs_copy["obj"] = payload
-            return self.queue.put(*args, **kwargs_copy)
+            kwargs["obj"] = payload
+        else:
+            payload["obj"] = args[0]
+            args = list(args)
+            args[0] = payload
+            args = tuple(args)
 
-        payload["obj"] = args[0]
-        args_copy = list(args)
-        args_copy[0] = payload
-        args_copy = tuple(args_copy)
-        return self.queue.put(*args_copy, **kwargs)
+        return self.queue.put(*args, **kwargs)
+
+    def should_send_tnq(self) -> bool:
+        return randint(1, 20) == 1  # nosec
 
     def put(self, *args, **kwargs):
         if self.monitor:
-            try:
-                self.monitor.track_put()
-                if randint(1, 20) == 1:
-                    return self.put_w_tnq(*args, **kwargs)
-            except Exception as e:
-                print(f"failed to track put() with {e}")
+            self.monitor.track_put()
+            if self.should_send_tnq():
+                return self.put_w_tnq(*args, **kwargs)
 
         return self.queue.put(*args, **kwargs)
+
+    def extract_tnq(self, queue_content):
+        if (
+            isinstance(queue_content, dict)
+            and queue_content.get("_signature", "") == "mnqueue_tnq"
+        ):
+            self.monitor.time_in_queue(
+                time.time_ns() - int(queue_content["tnq"])
+            )
+            return queue_content["obj"]
+        return queue_content
 
     def get(self, *args, **kwargs):
         rc = self.queue.get(*args, **kwargs)
         if self.monitor:
-            try:
-                self.monitor.track_get()
-                if isinstance(rc, dict) and rc.get("_signature", "") == "mnqueue_tnq":
-                    self.monitor.time_in_queue(time.time_ns() - int(rc["tnq"]))
-                    rc = rc["obj"]
-            except Exception as e:
-                print(f"failed to track get() with {e}")
+            self.monitor.track_get()
+            rc = self.extract_tnq(rc)
 
         return rc
 

@@ -1,7 +1,7 @@
 from multiprocessing import Queue
 from typing import Optional
 
-__version__ = "0.0.13"
+__version__ = "0.0.14"
 
 import copy
 import time

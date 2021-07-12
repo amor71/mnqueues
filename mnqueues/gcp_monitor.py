@@ -1,11 +1,8 @@
-from random import random
 import time
+from random import random
 
 from opencensus.ext.stackdriver import stats_exporter
-from opencensus.stats import aggregation
-from opencensus.stats import measure
-from opencensus.stats import stats
-from opencensus.stats import view
+from opencensus.stats import aggregation, measure, stats, view
 
 from . import Monitor
 
@@ -19,7 +16,7 @@ class GCPMonitor(Monitor):
     def _create_put_measure(self):
         self.m_put = measure.MeasureInt(f"mnqueues.put", "number of puts", "1")
         self.v_put = view.View(
-            "mnqueues.number_queue_put",
+            f"mnqueues.{self.name}.number_queue_put",
             "number of put() to queues",
             [],
             self.m_put,
@@ -30,7 +27,7 @@ class GCPMonitor(Monitor):
     def _create_get_measure(self):
         self.m_get = measure.MeasureInt("mnqueues.get", "number of gets", "1")
         self.v_get = view.View(
-            "mnqueues.number_queue_get",
+            f"mnqueues.{self.name}.number_queue_get",
             "number of get() to queues",
             [],
             self.m_get,
@@ -41,11 +38,13 @@ class GCPMonitor(Monitor):
     def _create_tnq_measure(self):
         self.m_tnq = measure.MeasureInt("mnqueues.mnq", "time in queue", "ms")
         self.v_tnq = view.View(
-            "time_in_queue_distribution",
+            f"mnqueues.{self.name}.time_in_queue_distribution",
             "The distribution of the queue latencies",
             [],
             self.m_tnq,
-            aggregation.DistributionAggregation([10, 50, 100, 500, 1000, 10000]),
+            aggregation.DistributionAggregation(
+                [10, 50, 100, 500, 1000, 10000]
+            ),
         )
         stats.stats.view_manager.register_view(self.v_tnq)
 

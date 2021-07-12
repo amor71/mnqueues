@@ -48,12 +48,14 @@ Log all `put()` and `get()` calls to a log file with the the name `log-file-name
 
     from mnqueues.gcp_monitor import GCPMonitor
 
-    monitor = LOGMonitor("unique-name")
+    monitor = GCPMonitor("unique-name")
 
 All calls to `put()` and `get()` are sent to Google Cloud Monitor. The Monitor class sends data to two custom measures:
-1. `OpenCensus/mnqueues.number_queue_get` (line, no aggregation on GCP required)
-2. `OpenCensus/mnqueues.number_queue_put` (line, no aggregation on GCP required)
-3. `OpenCensus/mnqueues.time_in_queue_distribution` (heat-map with sum, shows latency distribution)
+1. `OpenCensus/mnqueues.{name}.number_queue_get` (line, no aggregation on GCP required)
+2. `OpenCensus/mnqueues.{name}.number_queue_put` (line, no aggregation on GCP required)
+3. `OpenCensus/mnqueues.{name}.time_in_queue_distribution` (heat-map with sum, shows latency distribution)
+
+Note that `{name}` is passed as a parameter when constructing the Monitor and it aims to assist in creating dash-boards for specific use-cases. 
 
 [See](https://amor71.github.io/mnqueues/gcp-metric-explorer.png) for details.
 

@@ -202,8 +202,7 @@ def test_mnpool_example():
             try:
                 x = next(it)
             except ZeroDivisionError:
-                if i == 5:
-                    pass
+                pass
             except StopIteration:
                 break
             else:

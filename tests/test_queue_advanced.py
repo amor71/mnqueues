@@ -10,7 +10,7 @@ from mnqueues.log_monitor import LOGMonitor
 
 
 def test_empty():
-    q = mnq.MNQueue(monitor=LOGMonitor("name"))
+    q = mnq.MNQueue(monitor=LOGMonitor("test"))
     try:
         _ = q.get(block=False)
     except Empty:
@@ -20,7 +20,7 @@ def test_empty():
 
 
 def test_no_full():
-    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("test"))
     try:
         _ = q.put(
             "aaa",
@@ -37,7 +37,7 @@ def test_no_full():
 
 
 def test_full():
-    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("test"))
     try:
         _ = q.put(
             "aaa",
@@ -60,7 +60,7 @@ def test_full():
 
 
 def test_timeout():
-    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("test"))
     try:
         _ = q.put("aaa")
         _ = q.put("aaa", block=True, timeout=5)
@@ -72,7 +72,7 @@ def test_timeout():
 
 
 def test_put_nowait():
-    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("test"))
     try:
         _ = q.put_nowait("aaa")
         _ = q.put_nowait("aaa")
@@ -84,7 +84,7 @@ def test_put_nowait():
 
 
 def test_get_nowait():
-    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("test"))
     try:
         _ = q.get_nowait()
     except Empty:
@@ -95,7 +95,7 @@ def test_get_nowait():
 
 
 def test_close():
-    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("test"))
     q.close()
     try:
         _ = q.get()
@@ -107,7 +107,7 @@ def test_close():
 
 
 def test_empty_2():
-    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("test"))
     if q.empty():
         print("queue is empty, good!")
         return True
@@ -116,14 +116,14 @@ def test_empty_2():
 
 
 def test_join():
-    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("test"))
     q.close()
     q.join_thread()
     return True
 
 
 def test_cancel_join_thread():
-    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("name"))
+    q = mnq.MNQueue(maxsize=1, monitor=LOGMonitor("test"))
     q.close()
     q.cancel_join_thread()
     return True

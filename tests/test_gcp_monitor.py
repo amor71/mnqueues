@@ -11,7 +11,7 @@ from mnqueues.gcp_monitor import GCPMonitor
 
 
 def test_gcp_monitor():
-    g = GCPMonitor("name")
+    g = GCPMonitor("test")
     return True
 
 
@@ -40,7 +40,7 @@ def producer(q: mnq.MNQueue):
 
 @pytest.mark.devtest
 def test_mp_basic():
-    q = mnq.MNQueue(monitor=GCPMonitor("name"))
+    q = mnq.MNQueue(monitor=GCPMonitor("test"))
     p = Process(target=producer, args=(q,))
     c = Process(target=consumer, args=(q,))
 
@@ -53,7 +53,7 @@ def test_mp_basic():
 
 @pytest.mark.devtest
 def test_mp_2():
-    q = mnq.MNQueue(monitor=GCPMonitor("name"))
+    q = mnq.MNQueue(monitor=GCPMonitor("test"))
     p = Process(target=producer, args=(q,))
     c1 = Process(target=consumer, args=(q,))
     c2 = Process(target=consumer, args=(q,))
@@ -84,7 +84,7 @@ def consumer_no_delay(q: mnq.MNQueue):
 def test_mp_3():
     print("grace before starting test_mp_3")
     sleep(65)
-    q = mnq.MNQueue(monitor=GCPMonitor("name"))
+    q = mnq.MNQueue(monitor=GCPMonitor("test"))
     p = Process(target=producer, args=(q,))
     c1 = Process(target=consumer_no_delay, args=(q,))
     c2 = Process(target=consumer_no_delay, args=(q,))

@@ -1,15 +1,17 @@
-import pytest
 import multiprocessing as mp
-from multiprocessing import Queue, Process
-import mnqueues as mnq
-from mnqueues.log_monitor import LOGMonitor
+import random
+from multiprocessing import Process, Queue
 from queue import Empty
 from time import sleep
-import random
+
+import pytest
+
+import mnqueues as mnq
+from mnqueues.log_monitor import LOGMonitor
 
 
 def test_gcp_monitor():
-    g = LOGMonitor("name")
+    g = LOGMonitor("test")
     return True
 
 
@@ -37,7 +39,7 @@ def producer(q: mnq.MNQueue):
 
 
 def test_mp_basic():
-    q = mnq.MNQueue(monitor=LOGMonitor("name"))
+    q = mnq.MNQueue(monitor=LOGMonitor("test"))
     p = Process(target=producer, args=(q,))
     c = Process(target=consumer, args=(q,))
 
@@ -49,7 +51,7 @@ def test_mp_basic():
 
 
 def test_mp_2():
-    q = mnq.MNQueue(monitor=LOGMonitor("name"))
+    q = mnq.MNQueue(monitor=LOGMonitor("test"))
     p = Process(target=producer, args=(q,))
     c1 = Process(target=consumer, args=(q,))
     c2 = Process(target=consumer, args=(q,))

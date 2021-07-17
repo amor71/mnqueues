@@ -79,29 +79,9 @@ class MNQueue:
 
         return rc
 
-    def qsize(self):
-        return self.queue.qsize()
-
-    def empty(self):
-        return self.queue.empty()
-
-    def full(self):
-        return self.queue.full()
-
-    def get_nowait(self):
-        return self.get(False)
-
-    def put_nowait(self, obj):
-        return self.put(obj, False)
-
-    def close(self):
-        self.queue.close()
-
-    def join_thread(self):
-        self.queue.join_thread()
-
-    def cancel_join_thread(self):
-        self.queue.cancel_join_thread()
+    def __getattr__(self, attr):
+        if attr not in self.__dict__:
+            return self.queue.__getattribute__(attr)
 
 
 class MNPool:

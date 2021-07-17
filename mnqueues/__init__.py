@@ -1,4 +1,4 @@
-from multiprocessing import Queue
+from multiprocessing import Pool, Queue
 from typing import Optional
 
 __version__ = "0.0.16"
@@ -99,3 +99,13 @@ class MNQueue:
 
     def cancel_join_thread(self):
         self.queue.cancel_join_thread()
+
+
+class MNPool:
+    def __init__(self, *args, monitor=None, **kwargs):
+        self.monitor = monitor
+        self.pool: Pool = Pool(*args, **kwargs)
+
+        def __getattr__(self, attr):
+            if attr not in self.__dict__:
+                return self.pool.__getattribute__(attr)

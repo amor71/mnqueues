@@ -24,6 +24,9 @@ class Monitor:
     def time_in_queue(self, tnq: int):
         pass
 
+    def track_time_in_pool(self, nano_seconds: int):
+        pass
+
 
 class MNQueue:
     def __init__(self, monitor: Optional[Monitor] = None, maxsize=0):
@@ -105,7 +108,22 @@ class MNPool:
     def __init__(self, *args, monitor=None, **kwargs):
         self.monitor = monitor
         self.pool: Pool = Pool(*args, **kwargs)
+        self.tnp: int
 
-        def __getattr__(self, attr):
-            if attr not in self.__dict__:
-                return self.pool.__getattribute__(attr)
+    def __getattr__(self, attr):
+        if attr not in self.__dict__:
+            return self.pool.__getattribute__(attr)
+
+    def __enter__(self):
+        if self.monitor:
+            self.tnp = time.time_ns()
+
+        return self.pool.__enter__()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        _exit = self.pool.__exit__(exc_type, exc_val, exc_tb)
+
+        if self.monitor:
+            self.monitor.track_time_in_pool(time.time_ns() - self.tnp)
+
+        return _exit

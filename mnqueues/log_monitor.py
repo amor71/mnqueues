@@ -1,8 +1,9 @@
-from random import random
-import time
 import logging
-from . import Monitor
 import os
+import time
+from random import random
+
+from . import Monitor
 
 
 class LOGMonitor(Monitor):
@@ -18,7 +19,7 @@ class LOGMonitor(Monitor):
             encoding="utf-8",
             level=logging.INFO,
             datefmt="%Y-%m-%d %H:%M:%S",
-            pid=os.getpid(),
+            force=True,
         )
         self.created = True
 
@@ -39,3 +40,8 @@ class LOGMonitor(Monitor):
         if not self.created:
             self.create()
         logging.info(f"time-in-queue {tnq/1000000} millisecond")
+
+    def track_time_in_pool(self, nano_seconds: int):
+        if not self.created:
+            self.create()
+        logging.info(f"time-in-pool {nano_seconds/1000000} millisecond")

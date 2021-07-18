@@ -48,12 +48,26 @@ class GCPMonitor(Monitor):
         )
         stats.stats.view_manager.register_view(self.v_tnq)
 
+    def _create_time_in_pool_measure(self):
+        self.m_tnp = measure.MeasureInt("mnqueues.mnp", "time in pool", "ms")
+        self.v_tnp = view.View(
+            f"mnqueues.{self.name}.time_in_pool_distribution",
+            "The distribution of time in pool latencies",
+            [],
+            self.m_tnp,
+            aggregation.DistributionAggregation(
+                [10, 50, 100, 500, 1000, 10000]
+            ),
+        )
+        stats.stats.view_manager.register_view(self.v_tnp)
+
     def create(self):
         self.created = True
 
         self._create_put_measure()
         self._create_get_measure()
         self._create_tnq_measure()
+        self._create_time_in_pool_measure()
 
         exporter = stats_exporter.new_stats_exporter()
         stats.stats.view_manager.register_exporter(exporter)
@@ -79,4 +93,11 @@ class GCPMonitor(Monitor):
             self.create()
         mmap = stats.stats.stats_recorder.new_measurement_map()
         mmap.measure_int_put(self.m_tnq, tnq / 1000000)
+        mmap.record()
+
+    def track_time_in_pool(self, nano_seconds: int):
+        if not self.created:
+            self.create()
+        mmap = stats.stats.stats_recorder.new_measurement_map()
+        mmap.measure_int_put(self.m_tnp, nano_seconds / 1000000)
         mmap.record()

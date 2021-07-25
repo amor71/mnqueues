@@ -131,6 +131,7 @@ def noop(x):
 #
 # Test code
 #
+@pytest.mark.devtest
 def test_mnpool_example():
     print("test_mnpool_example")
     mon = GCPMonitor("test")

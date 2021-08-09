@@ -6,5 +6,5 @@ grpcio==1.39.0
 black==21.7b0
 mypy==0.910
 pylint==2.9.6
-therapist==2.1.2
+therapist==2.2.0
 bandit==1.7.0

@@ -83,9 +83,11 @@ class MNQueue:
         print("MNQueue pickling")
         return self.__dict__
 
+    def __setstate__(self, state):
+        self.__dict__ = state
+        print("MNQueue unpickling")
+
     def __getattr__(self, attr):
-        if attr in ("__setstate__"):
-            return
         if self.queue and attr not in self.__dict__:
             return self.queue.__getattribute__(attr)
 

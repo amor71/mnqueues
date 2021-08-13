@@ -1,7 +1,7 @@
-from multiprocessing import Pool, Queue
+import multiprocessing as mp
 from typing import Optional
 
-__version__ = "0.0.22"
+__version__ = "0.0.23"
 
 import copy
 import time
@@ -31,7 +31,7 @@ class Monitor:
 class MNQueue:
     def __init__(self, monitor: Optional[Monitor] = None, maxsize=0):
         self.monitor = monitor
-        self.queue: Queue = Queue(maxsize)
+        self.queue: mp.Queue = mp.Queue(maxsize)
 
     def put_w_tnq(self, *args, **kwargs):
         payload = {
@@ -87,7 +87,7 @@ class MNQueue:
 class MNPool:
     def __init__(self, *args, monitor=None, **kwargs):
         self.monitor = monitor
-        self.pool: Pool = Pool(*args, **kwargs)
+        self.pool: mp.Pool = mp.Pool(*args, **kwargs)
         self.tnp: int
 
     def __getattr__(self, attr):

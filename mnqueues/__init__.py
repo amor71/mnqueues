@@ -1,7 +1,7 @@
 import multiprocessing as mp
 from typing import Optional
 
-__version__ = "0.0.23"
+__version__ = "0.0.24"
 
 import copy
 import time
@@ -80,7 +80,7 @@ class MNQueue:
         return rc
 
     def __getattr__(self, attr):
-        if attr not in self.__dict__:
+        if self.queue and attr not in self.__dict__:
             return self.queue.__getattribute__(attr)
 
 

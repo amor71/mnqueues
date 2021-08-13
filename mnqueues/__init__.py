@@ -1,7 +1,7 @@
 import multiprocessing as mp
 from typing import Optional
 
-__version__ = "0.0.26"
+__version__ = "0.0.27"
 
 import copy
 import time
@@ -79,11 +79,9 @@ class MNQueue:
 
         return rc
 
-    def __setstate__(self, state):
-        print("setstate called with", state)
-
     def __getattr__(self, attr):
-        print(attr)
+        if attr in ("__getstate__", "__setstate__"):
+            return
         if self.queue and attr not in self.__dict__:
             return self.queue.__getattribute__(attr)
 

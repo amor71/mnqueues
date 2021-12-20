@@ -4,7 +4,7 @@ black==21.12b0
 opencensus-ext-stackdriver==0.7.4
 grpcio==1.43.0
 black==21.12b0
-mypy==0.910
+mypy==0.920
 pylint==2.12.2
 therapist==2.2.0
 bandit==1.7.1

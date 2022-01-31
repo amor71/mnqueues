@@ -1,5 +1,5 @@
 pytest==6.2.5
 opencensus==0.8.0
-black==21.12b0
+black==22.1.0
 opencensus-ext-stackdriver==0.7.4
 grpcio==1.42.0

@@ -1,7 +1,7 @@
 import multiprocessing as mp
 from typing import Optional
 
-__version__ = "0.0.37"
+__version__ = "0.0.38"
 
 import copy
 import time

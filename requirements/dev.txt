@@ -2,7 +2,7 @@ pytest==8.3.2
 opencensus==0.11.4
 black==24.8.0
 opencensus-ext-stackdriver==0.7.4
-grpcio==1.46.3
+grpcio==1.66.1
 black==24.8.0
 mypy==0.960
 pylint==2.13.9

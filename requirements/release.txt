@@ -1,5 +1,5 @@
-pytest==7.1.2
-opencensus==0.9.0
-black==22.3.0
+pytest==8.3.3
+opencensus==0.11.4
+black==24.10.0
 opencensus-ext-stackdriver==0.7.4
-grpcio==1.46.3
+grpcio==1.67.0

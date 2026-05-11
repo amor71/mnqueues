@@ -7,4 +7,4 @@ black==26.3.1
 mypy==2.0.0
 pylint==4.0.5
 therapist==2.2.0
-bandit==1.7.4
+bandit==1.9.4
